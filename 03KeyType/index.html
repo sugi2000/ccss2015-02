@@ -1,0 +1,86 @@
+<html>
+<script type="text/javascript" src="lib/jquery.min.js"></script>
+<script type="text/javascript" src="lib/p5.min.js"></script>
+<script type="text/javascript" src="lib/p5.dom.js"></script>
+
+<script>
+
+function setup() {
+  var div = createDiv('');
+
+  var select = createElement('select')
+    .id('font-select')
+    .parent(div);
+
+  $(select.elt).change(function() {
+    createImages(this.value);
+  });
+
+  createElement('option', 'Helvetica')
+    .class('font-option')
+    .parent(select);
+  createElement('option', 'Georgia')
+    .class('font-option')
+    .parent(select);
+
+  createCanvas(400, 400);
+  background(0);
+
+  createImages('Helvetica');
+}
+
+function draw() {
+}
+
+function createImages(fontName) {
+
+  //var fontName = selectAll('.font-option')[select('#font-select').elt.selectedIndex].value();
+
+  for (var i = 32; i <= 126; i++) {
+    textSize(200 * 0.9);
+    textFont(fontName);
+    var letter = char(i);
+    var letterWidth = textWidth(letter);
+
+    if (select('#' + letter)) {
+      select('#' + letter).remove();
+    }
+
+    var g = createGraphics(letterWidth, 200);
+    g.id(letter);
+    g.background(0);
+    g.fill(255);
+    g.noStroke();
+    //g.noSmooth();
+    g.textSize(g.height * 0.9);
+    g.textFont(fontName);
+    g.textAlign(CENTER);
+    g.text(letter, g.width / 2, g.height * 0.9 * 0.8);
+    //g.style('display', 'inline'); // make hidden canvas visible
+  }
+}
+
+function keyTyped() {
+  var code = unchar(key);
+  if (code >= 32 && code <= 126) {
+    var img = select('#' + key);
+    var drawWidth = img.elt.width / img.elt.height * width;
+    background(0);
+    image(img, (width - drawWidth) / 2, 0, drawWidth, height);
+    //image(img, 0, 0, width, height);
+  }
+  return false; // prevent any default behavior
+}
+
+function drawImages(text) {
+  background(0);
+  var x = 0;
+  for (var i = 0; i < text.length; i++) {
+    var img = select('#' + text.substr(i, 1));
+    image(img, x, 0)
+    x += img.width;
+  }
+}
+
+</script>
+</html>

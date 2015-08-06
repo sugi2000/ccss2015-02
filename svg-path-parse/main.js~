@@ -1,0 +1,45 @@
+var fs = require('fs');
+var parseString = require('xml2js').parseString;
+var parse = require('svg-path-parser');
+
+var svgFiles = [];
+
+// get file list
+fs.readdir('svg/', function(err, files) {
+	if (err) { throw err; }
+	files.filter(function(file) {
+		return fs.statSync('svg/' + file).isFile() && /.*\.svg$/.test(file);
+	    }).forEach(function(file) {
+		    svgFiles.push(file);
+		});
+	//console.dir(svgFiles);
+	svgFiles.forEach(parseSVG);
+    });
+
+//console.dir(svgFiles);
+//svgFiles.forEach(parseSVG);
+
+function parseSVG (file, index, array) {
+    console.log(file);
+}
+
+
+fs.readFile('svg/A.svg', 'utf8', function (err, text) {
+        if (err) { console.log(err); }
+	parseString(text, {
+		trim: true,
+		explicitArray: false
+		}, function (err, result) {
+		//console.dir(result);
+		var json = JSON.parse(JSON.stringify(result));
+		var d = json.svg.g.path['$'].d;
+		//console.dir(parse(d));
+		fs.writeFile('json/A.json', JSON.stringify(parse(d)), function (err) {
+			    if (err) { console.log(err); }
+			});
+	    });
+});
+
+    //fs.writeFile('json/test.json', JSON.stringify(parse(d)), function (err) {
+    //	if (err) { console.log(err); }
+    //});

@@ -1,0 +1,58 @@
+<html>
+<script type="text/javascript" src="lib/p5.min.js"></script>
+<script type="text/javascript" src="lib/p5.dom.js"></script>
+<script type="text/javascript" src="lib/svg.js"></script>
+<script type="text/javascript" src="lib/typedata.js"></script>
+
+<script>
+var paths;
+
+function preload() {
+}
+
+function setup() {
+  //paths = toAbsoluteSVG(BJSON, 1.0, -100, -200);
+  paths = toAbsoluteSVG(CCSSJSON, 1.0, 0, 0);
+
+  createCanvas(800, 200);
+  background(255);
+  fill(0);
+  noStroke();
+}
+
+function draw() {
+  background(255);
+  drawSVG(randomize(paths));
+}
+
+function randomize(data) {
+  var results = [];
+  //var strength = snapStrength / 100.0;
+
+  for (var i = 0; i < data.length; i++) {
+    var path = [];
+    for (var j = 0; j < data[i].length; j++) {
+      var command = {};
+      var one = data[i][j];
+      command.code = one.code;
+      if (one.code !== 'Z') {
+        command.x = one.x + random(10);
+        command.y = one.y + random(10);
+      }
+      if (one.code === 'Q' || one.code === 'C') {
+        command.x1 = one.x1;
+        command.y1 = one.y1;
+      }
+      if (one.code === 'C') {
+        command.x2 = one.x2;
+        command.y2 = one.y2;
+      }
+      path.push(command);
+    }
+    results.push(path);
+  }
+  return results;
+}
+
+</script>
+</html>

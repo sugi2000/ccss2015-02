@@ -1,0 +1,132 @@
+<html>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.7/p5.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.7/addons/p5.dom.js"></script>
+
+<!--
+<script type="text/javascript" src="lib/p5.min.js"></script>
+<script type="text/javascript" src="lib/p5.dom.min.js"></script>
+-->
+
+<script>
+
+function setup() {
+  var div = createDiv('');
+
+  var label = createElement('label', '時間表示')
+    .parent(div);
+  createInput('時刻表示')
+    .id('time-check')
+    .attribute('type', 'checkbox')
+    .attribute('checked', 'checked')
+    .parent(label);
+
+  var input = createInput('ABC')
+    .id('input')
+    .parent(div);
+
+  $(input.elt).on('keyup', function() {
+    drawImages(this.value);
+  });
+
+/*
+  $(input.elt).change(function() {
+    drawImages(this.value);
+  });
+*/
+
+  var select = createElement('select')
+    .id('font-select')
+    .parent(div);
+
+  $(select.elt).change(function() {
+    createImages(this.value);
+  });
+
+  createElement('option', 'Helvetica')
+    .class('font-option')
+    .parent(select);
+  createElement('option', 'Georgia')
+    .class('font-option')
+    .parent(select);
+
+/*
+  createButton('Create Images')
+    .parent(div)
+    .mouseClicked(createImages);
+*/
+
+  createButton('Download Images')
+    .parent(div)
+    .mouseClicked(downloadImages);
+
+  createCanvas(200 * 95, 200);
+  background(0);
+
+  createImages('Helvetica');
+}
+
+function draw() {
+  if ($('#time-check').prop('checked')) {
+    var input = select('#input');
+
+    input.value(timeString());
+    drawImages(input.value());
+  }
+}
+
+function timeString() {
+  var h = hour();
+  var m = minute();
+  var s = second();
+  return str(floor(h / 10)) + str (h % 10) + ':' +
+    str(floor(m / 10)) + str(m % 10) + ':' +
+    str(floor(s / 10)) + str(s % 10);
+}
+
+function createImages(fontName) {
+
+  //var fontName = selectAll('.font-option')[select('#font-select').elt.selectedIndex].value();
+
+  for (var i = 32; i <= 126; i++) {
+    textSize(200 * 0.9);
+    textFont(fontName);
+    var letter = char(i);
+    var letterWidth = textWidth(letter);
+
+    if (select('#' + letter)) {
+      select('#' + letter).remove();
+    }
+
+    var g = createGraphics(letterWidth, 200);
+    g.id(letter);
+    g.background(0);
+    g.fill(255);
+    g.noStroke();
+    //g.noSmooth();
+    g.textSize(g.height * 0.9);
+    g.textFont(fontName);
+    g.textAlign(CENTER);
+    g.text(letter, g.width / 2, g.height * 0.9 * 0.8);
+    g.style('display', 'inline'); // make hidden canvas visible
+  }
+}
+
+function downloadImages() {
+  for (var i = 32; i <= 126; i++) {
+    saveCanvas(select('#' + char(i)), i.toString(), 'png');
+  }
+}
+
+function drawImages(text) {
+  background(0);
+  var x = 0;
+  for (var i = 0; i < text.length; i++) {
+    var img = select('#' + text.substr(i, 1));
+    image(img, x, 0)
+    x += img.width;
+  }
+}
+
+</script>
+</html>

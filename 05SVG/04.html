@@ -1,0 +1,86 @@
+<html>
+<script type="text/javascript" src="lib/p5.min.js"></script>
+<script type="text/javascript" src="lib/p5.dom.js"></script>
+<script type="text/javascript" src="lib/svg.js"></script>
+<script type="text/javascript" src="lib/typedata.js"></script>
+
+<script>
+var paths;
+
+function preload() {
+}
+
+function setup() {
+  //paths = toAbsoluteSVG(AJSON, 1.0, -100, -200);
+  //paths = toAbsoluteSVG(BJSON, 1.0, -100, -200);
+  paths = toAbsoluteSVG(CCSSJSON, 1.0, 0, 0);
+
+  createCanvas(800, 200);
+  background(255);
+  fill(0);
+  noStroke();
+}
+
+function draw() {
+  background(255);
+  fill(220);
+  drawSVG(paths);
+  drawLines(randomize(paths));
+}
+
+function drawLines(data) {
+  var x = -1, y = -1;
+  for (var i = 0; i < data.length; i++) {
+    var path = [];
+    for (var j = 0; j < data[i].length; j++) {
+      var one = data[i][j];
+      if (one.code !== 'Z') {
+        stroke(0);
+          if (one.code != 'M') {
+            line(x, y, one.x, one.y);
+          }
+          ellipse(one.x, one.y, 10, 10);
+          x = one.x;
+          y = one.y;
+          fill(0);
+          noStroke();
+          text(j, x, y - 10);
+      }
+      if (one.code === 'Q' || one.code === 'C') {
+      }
+      if (one.code === 'C') {
+      }
+    }
+  }
+}
+
+function randomize(data) {
+  var results = [];
+
+  for (var i = 0; i < data.length; i++) {
+    var path = [];
+    for (var j = 0; j < data[i].length; j++) {
+      var command = {};
+      var one = data[i][j];
+      command.code = one.code;
+      if (one.code !== 'Z') {
+        command.x = one.x + cos(radians(frameCount % 360) * 10) * 10;
+        command.y = one.y + sin(radians(frameCount % 360) * 10) * 10;
+      }
+      if (one.code === 'Q' || one.code === 'C') {
+        command.x1 = one.x1;
+        command.y1 = one.y1;
+      }
+      if (one.code === 'C') {
+        command.x2 = one.x2;
+        command.y2 = one.y2;
+      }
+      path.push(command);
+    }
+    results.push(path);
+  }
+  return results;
+}
+
+</script>
+</html>
