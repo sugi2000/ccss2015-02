@@ -1,15 +1,9 @@
 <html>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.7/p5.min.js"></script>
-
-<!--
 <script type="text/javascript" src="lib/p5.min.js"></script>
-<script type="text/javascript" src="lib/p5.dom.min.js"></script>
--->
 
 <script>
 var imgs = {};
 var currentImage;
-var offset = 0;
 
 function preload() {
   for (var i = 32; i <= 126; i++) {
@@ -28,11 +22,9 @@ function setup() {
 function draw() {
   if (!currentImage) { return; }
 
-  background(0);
-
   for (var i = 0; i < 24; i++) {
     for (var j = 0; j < 24; j++) {
-      var x = (i + offset) * width / 24;
+      var x = (i + 0.5) * width / 24;
       var y = (j + 0.5) * height / 24;
       var c = currentImage.get(x * currentImage.width / width, y * currentImage.height / height);
       fill(c);
@@ -41,10 +33,6 @@ function draw() {
     }
   }
 
-  offset += 0.1;
-  if (offset > 1.0) {
-    offset = 0;
-  }
 }
 
 function draw_() {

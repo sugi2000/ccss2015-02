@@ -2,32 +2,14 @@
 <script type="text/javascript" src="lib/jquery.min.js"></script>
 <script type="text/javascript" src="lib/p5.min.js"></script>
 <script type="text/javascript" src="lib/p5.dom.js"></script>
+
 <script>
+
+var offset = 0;
+var offScreen;
 
 function setup() {
   var div = createDiv('');
-
-  var label = createElement('label', '時間表示')
-    .parent(div);
-  createInput('時刻表示')
-    .id('time-check')
-    .attribute('type', 'checkbox')
-    .attribute('checked', 'checked')
-    .parent(label);
-
-  var input = createInput('ABC')
-    .id('input')
-    .parent(div);
-
-  $(input.elt).on('keyup', function() {
-    drawImages(this.value);
-  });
-
-/*
-  $(input.elt).change(function() {
-    drawImages(this.value);
-  });
-*/
 
   var select = createElement('select')
     .id('font-select')
@@ -44,38 +26,37 @@ function setup() {
     .class('font-option')
     .parent(select);
 
-/*
-  createButton('Create Images')
-    .parent(div)
-    .mouseClicked(createImages);
-*/
-
-  createButton('Download Images')
-    .parent(div)
-    .mouseClicked(downloadImages);
-
-  createCanvas(200 * 95, 200);
+  createCanvas(400, 400);
   background(0);
 
   createImages('Helvetica');
+  
+  offScreen = createGraphics(width, height)
+    .id('off-screen')
+    .style('display', 'inline');
+    
 }
 
 function draw() {
-  if ($('#time-check').prop('checked')) {
-    var input = select('#input');
+  background(0);
 
-    input.value(timeString());
-    drawImages(input.value());
+  var g = select('#off-screen');
+  
+  for (var i = 0; i < 24; i++) {
+    for (var j = 0; j < 24; j++) {
+      var x = (i + offset) * width / 24;
+      var y = (j + 0.5) * height / 24;
+      var c = offScreen.get(x * offScreen.width / width, y * offScreen.height / height);
+      fill(c);
+      ellipse(x, y, width / 24, height / 24);
+      //rect(x, y, width / 24, height / 24);
+    }
   }
-}
 
-function timeString() {
-  var h = hour();
-  var m = minute();
-  var s = second();
-  return str(floor(h / 10)) + str (h % 10) + ':' +
-    str(floor(m / 10)) + str(m % 10) + ':' +
-    str(floor(s / 10)) + str(s % 10);
+  offset += 0.1;
+  if (offset > 1.0) {
+    offset = 0;
+  }
 }
 
 function createImages(fontName) {
@@ -102,14 +83,21 @@ function createImages(fontName) {
     g.textFont(fontName);
     g.textAlign(CENTER);
     g.text(letter, g.width / 2, g.height * 0.9 * 0.8);
-    g.style('display', 'inline'); // make hidden canvas visible
+    //g.style('display', 'inline'); // make hidden canvas visible
   }
 }
 
-function downloadImages() {
-  for (var i = 32; i <= 126; i++) {
-    saveCanvas(select('#' + char(i)), i.toString(), 'png');
+function keyTyped() {
+  var code = unchar(key);
+  if (code >= 32 && code <= 126) {
+    var img = select('#' + key);
+    var drawWidth = img.elt.width / img.elt.height * width;
+    
+    var g = offScreen;
+    g.background(0);
+    g.image(img, (width - drawWidth) / 2, 0, drawWidth, height);
   }
+  return false; // prevent any default behavior
 }
 
 function drawImages(text) {
