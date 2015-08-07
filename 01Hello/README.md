@@ -9,8 +9,8 @@ p5.js はじめのコードです。
 | 項目 | Processing | p5.js |
 |:-----------|:-----------|:------------|
 |サイズ| size(w,h); | createCanvas(w,h); |
-|フレームレートの取得| framerate(変数) | framerate() (引数梨の関数) |
-|マウスの状態| mousePressed | mouseIsPressed |
+|フレームレートの取得| framerate (変数) | framerate**()** (引数なしの関数) |
+|マウスの状態| mousePressed | mouse**Is**Pressed |
 |座標変換| pushMatrix(); popMatrix(); | push(); pop(); |
 |変数の型| int, float, Booleanなど | すべてvar |
 |プリロード| - | void preload() {} |
