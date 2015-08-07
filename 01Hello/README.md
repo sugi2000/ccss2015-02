@@ -5,7 +5,7 @@ htmlでp5.jsを参照し、script要素のなかに本体を記述していま�
 本体を外部のjsファイル参照にしても、もちろんOKです。
 
 ##p5.js基本テンプレート
-```
+```html:index.html
 <html>
 <script type="text/javascript" src="lib/p5.min.js"></script>
 <script type="text/javascript" src="lib/p5.dom.js"></script>
@@ -26,7 +26,7 @@ function draw() {
 | 項目 | Processing | p5.js |
 |:-----------|:-----------|:------------|
 |サイズ| size(w,h); | createCanvas(w,h); |
-|関数の書き方| void draw() {} | function draw() {} |
+|関数の書き方| **void** draw() {} | **function** draw() {} |
 |フレームレートの取得| framerate (変数) | framerate**()** (引数なしの関数) |
 |マウスの状態| mousePressed | mouse**Is**Pressed |
 |座標変換| pushMatrix(); popMatrix(); | push(); pop(); |
