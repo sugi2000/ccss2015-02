@@ -18,6 +18,7 @@ function setup() {
 
   $(select.elt).change(function() {
     createImages(this.value);
+	updateOffScreen();
   });
 
   createElement('option', 'Helvetica')
@@ -29,34 +30,39 @@ function setup() {
 
   createCanvas(800, 400);
   background(0);
+  ellipseMode(CENTER);
+  rectMode(CENTER);
 
   createImages('Helvetica');
   
-  offScreen = createGraphics(width, height)
+  offScreen = createGraphics(800, 200)
     .id('off-screen')
     .style('display', 'block');
-  
+    
   updateOffScreen();
 }
 
 function draw() {
-  background(0);
-
-  var g = select('#off-screen');
+  var g = offScreen;
   
-  for (var i = 0; i < 24; i++) {
-    for (var j = 0; j < 24; j++) {
-      var x = (i + offset) * width / 24;
-      var y = (j + 0.5) * height / 24;
-      var c = offScreen.get(x * offScreen.width / width, y * offScreen.height / height);
+  background(40);
+  for (var i = 0; i < 40; i++) {
+    for (var j = 0; j < 20; j++) {
+      var x = (i + 0.5) * width / 40;
+      var y = (j + 0.5) * height / 20;
+      var getx = x * g.height / height + offset;
+      if (getx > g.width) {
+        getx -= g.width;
+      }
+      var c = g.get(getx, y * g.height / height);
       fill(c);
-      ellipse(x, y, width / 24, height / 24);
-      //rect(x, y, width / 24, height / 24);
+      ellipse(x, y, width / 40, height / 20);
+      //rect(x, y, width / 40, height / 20);
     }
   }
-
-  offset += 0.1;
-  if (offset > 1.0) {
+  
+  offset += 10;
+  if (offset > g.width) {// - width * g.height / height) {
     offset = 0;
   }
 }
@@ -90,31 +96,32 @@ function createImages(fontName) {
 }
 
 function keyTyped() {
-	/*
-	if (keyCode === DELETE) {
-		drawStr = drawStr.substr(0, drawStr.length - 1);
-	}
-	*/
   var code = unchar(key);
   if (code >= 32 && code <= 126) {
   	drawStr += key;
-  	if (drawStr.length > 4) {
-  		drawStr = drawStr.substring(1);
-  	}
   	updateOffScreen();
   }
   return false; // prevent any default behavior
 }
 
+function keyPressed() {
+  if (keyCode === ESCAPE) {
+  	drawStr = '';
+    updateOffScreen();
+  	return false;
+  }
+}
+
 function updateOffScreen() {
 	var x = 0;
   var g = offScreen;
+  
   g.background(0);
 	for (var i = 0; i < drawStr.length; i++) {
     var img = select('#' + drawStr.substr(i, 1));
-    var drawWidth = img.elt.width / img.elt.height * height;
+    var drawWidth = img.elt.width / img.elt.height * g.height;
     
-    g.image(img, x, 0, drawWidth, height);
+    g.image(img, x, 0, drawWidth, g.height);
     x += drawWidth;
 	}
 }
