@@ -7,6 +7,7 @@
 
 var offset = 0;
 var offScreen;
+var drawStr = '';
 
 function setup() {
   var div = createDiv('');
@@ -26,15 +27,16 @@ function setup() {
     .class('font-option')
     .parent(select);
 
-  createCanvas(400, 400);
+  createCanvas(800, 400);
   background(0);
 
   createImages('Helvetica');
   
   offScreen = createGraphics(width, height)
     .id('off-screen')
-    .style('display', 'inline');
-    
+    .style('display', 'block');
+  
+  updateOffScreen();
 }
 
 function draw() {
@@ -88,16 +90,33 @@ function createImages(fontName) {
 }
 
 function keyTyped() {
+	/*
+	if (keyCode === DELETE) {
+		drawStr = drawStr.substr(0, drawStr.length - 1);
+	}
+	*/
   var code = unchar(key);
   if (code >= 32 && code <= 126) {
-    var img = select('#' + key);
-    var drawWidth = img.elt.width / img.elt.height * width;
-    
-    var g = offScreen;
-    g.background(0);
-    g.image(img, (width - drawWidth) / 2, 0, drawWidth, height);
+  	drawStr += key;
+  	if (drawStr.length > 4) {
+  		drawStr = drawStr.substring(1);
+  	}
+  	updateOffScreen();
   }
   return false; // prevent any default behavior
+}
+
+function updateOffScreen() {
+	var x = 0;
+  var g = offScreen;
+  g.background(0);
+	for (var i = 0; i < drawStr.length; i++) {
+    var img = select('#' + drawStr.substr(i, 1));
+    var drawWidth = img.elt.width / img.elt.height * height;
+    
+    g.image(img, x, 0, drawWidth, height);
+    x += drawWidth;
+	}
 }
 
 function drawImages(text) {
