@@ -26,6 +26,7 @@ function draw() {
 | 項目 | Processing | p5.js |
 |:-----------|:-----------|:------------|
 |サイズ| size(w,h); | createCanvas(w,h); |
+|関数の書き方| void draw() {} | function draw() {} |
 |フレームレートの取得| framerate (変数) | framerate**()** (引数なしの関数) |
 |マウスの状態| mousePressed | mouse**Is**Pressed |
 |座標変換| pushMatrix(); popMatrix(); | push(); pop(); |
