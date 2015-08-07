@@ -1,6 +1,23 @@
 # 01. Hello
 
 p5.js はじめのコードです。
+htmlでp5.jsを参照し、script要素のなかに本体を記述しています。
+本体を外部のjsファイル参照にしても、もちろんOKです。
+
+##p5.js基本テンプレート
+```
+<html>
+<script type="text/javascript" src="lib/p5.min.js"></script>
+<script type="text/javascript" src="lib/p5.dom.js"></script>
+
+<script>
+function setup() {
+}
+function draw() {
+}
+</script>
+</html>
+```
 
 ## Processing のコードを p5.js に移行するには
 
