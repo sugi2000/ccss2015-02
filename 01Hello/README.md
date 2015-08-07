@@ -2,6 +2,13 @@
 
 p5.js はじめのコードです。
 
+## Processing のコードを p5.js に移行するには
+
+| Processing | p5.js |
+| size(w,h); | createCanvas(w,h); |
+
+
+
 ## 参考リンク
 - [p5.js 公式サイト](http://p5js.org/)
 - [ダウンロード](http://p5js.org/download/)
