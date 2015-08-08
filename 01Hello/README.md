@@ -5,7 +5,7 @@ htmlでp5.jsを参照し、script要素のなかに本体を記述していま�
 本体を外部のjsファイル参照にしても、もちろんOKです。
 
 ##p5.js基本テンプレート
-```html:index.html
+```javascript:index.html
 <html>
 <script type="text/javascript" src="lib/p5.min.js"></script>
 <script type="text/javascript" src="lib/p5.dom.js"></script>
