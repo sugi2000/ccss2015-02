@@ -31,7 +31,7 @@ function draw() {
 |マウスの状態| mousePressed | mouse**Is**Pressed |
 |座標変換| pushMatrix(); popMatrix(); | push(); pop(); |
 |変数の型| int, float, Booleanなど | すべてvar |
-|プリロード| - | void preload() {} |
+|プリロード| - | function preload() {} |
 |タッチイベント| - | touchX, touchY, touches[]など |
 |名前空間| - | var myp5 = new p5(function(sketch) {});|
 |p5.jsにないもの|3D, PShape, PFontなど| - |
